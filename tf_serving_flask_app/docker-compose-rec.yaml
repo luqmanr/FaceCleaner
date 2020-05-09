@@ -1,0 +1,38 @@
+version: '2.3'
+
+services:
+  tf-serving-server:    
+    container_name: tf-serving-server    
+    image: cputratama/tensorflow-serving-devel-gpu:latest-4
+    runtime: nvidia
+    volumes:
+      - /home/rkb/dir:/workspace
+    command: tensorflow_model_server --port=9002 --model_name=yolo_num --per_process_gpu_memory_fraction=0.2 --model_base_path=/workspace/ALPR/training_grounds/recognition/source/yolo_num &> inception_log &
+    networks:
+      - tf_serving
+    ports:
+      - "9002:9002"
+
+
+  tf-serving-client:
+    container_name: tf-serving-client
+    image: cputratama/tensorflow-serving-client:ver3
+    stdin_open: true
+    tty: true
+    networks:
+      - tf_serving
+    ports:
+      - "5002:5002"
+      - "8889:8889"
+    environment:
+      - TF_SERVER_NAME=tf-serving-server
+      - TF_SERVER_PORT=9002
+      - FLASK_SERVER_NAME=0.0.0.0
+      - FLASK_SERVER_PORT=5002
+      - FLASK_DEBUG=1
+    depends_on:
+      - tf-serving-server
+
+networks:
+  tf_serving:
+    driver: bridge

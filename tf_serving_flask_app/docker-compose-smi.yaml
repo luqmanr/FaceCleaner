@@ -1,0 +1,6 @@
+version: "2.3"
+services:
+  nvidia:
+    image: nvidia/cuda
+    runtime: nvidia
+    command: nvidia-smi

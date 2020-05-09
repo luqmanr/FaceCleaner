@@ -1,0 +1,12 @@
+version: '2.3'
+
+services:
+  tf-serving-server:    
+    container_name: tf-serving-server    
+    image: cputratama/tensorflow-serving-devel-gpu:latest-4
+    runtime: nvidia
+    volumes:
+      - /home/rkb/dir:/workspace
+    command: tensorflow_model_server --port=9002 --model_name=yolo_num --model_base_path=/workspace/ALPR/training_grounds/recognition/source/yolo_num &> inception_log &    
+    ports:
+      - "9002:9002"

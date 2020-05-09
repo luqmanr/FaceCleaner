@@ -1,0 +1,33 @@
+version: "2.3"
+
+services:
+  tf-serving-server:    
+    container_name: tf-serving-server    
+    image: $USER/tensorflow-serving-devel-gpu:latest-2
+    runtime: nvidia
+    command: bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server --port=9002 --model_name=obj_det --model_base_path=/tmp/obj &> obj_log &
+    networks:
+      - tf_serving
+    ports:
+      - "9002:9002"
+
+
+  tf-serving-client:
+    container_name: tf-serving-client
+    image: $USER/tensorflow-serving-client:obj
+    networks:
+      - tf_serving
+    ports:
+      - "5000:5000"
+    environment:
+      - TF_SERVER_NAME=tf-serving-server
+      - TF_SERVER_PORT=9002
+      - FLASK_SERVER_NAME=0.0.0.0
+      - FLASK_SERVER_PORT=5000
+      - FLASK_DEBUG=1
+    depends_on:
+      - tf-serving-server
+
+networks:
+  tf_serving:
+    driver: bridge
