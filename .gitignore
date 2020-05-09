@@ -9,6 +9,7 @@ DataCleaning/FaceEmbeddings/
 DataCleaning/tf_serving_flask_app/
 DataCleaning/third_party/
 DataCleaning/trash/
+DataCleaning/.git/
 Dataset/
 FaceClassifier/
 FaceCluster/
