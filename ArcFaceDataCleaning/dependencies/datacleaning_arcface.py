@@ -81,10 +81,14 @@ def reference_image_embeddings(input_path, output_path):
     csv_output = os.path.join(csv_folder, (folder_ID + '.csv'))
 
     for reference_image in reference_images:
-        embedding = core_arcface_cleaning.generate_embedding(reference_image)
-        img_name = os.path.basename(reference_image)
-        embedding = np.append(embedding, img_name)
-        write_embedding_to_csv(embedding, csv_output)
+        try:
+            embedding = core_arcface_cleaning.generate_embedding(reference_image)
+            img_name = os.path.basename(reference_image)
+            embedding = np.append(embedding, img_name)
+            write_embedding_to_csv(embedding, csv_output)
+        except:
+            print('failed to generate embedding for', img_name)
+            pass
 
 def write_embedding_to_csv(embedding, csv_output):
     array_df = pd.DataFrame(columns=embedding)
@@ -93,7 +97,8 @@ def write_embedding_to_csv(embedding, csv_output):
 def raw_image_embeddings(input_path, output_path):
     folder_ID = os.path.basename(input_path)
     folder_raw = os.path.join(output_path, 'raw', folder_ID)
-
+    
+    ## get all images within the reference folder
     def get_raw_images():
         raw_images = []
         images = os.listdir(folder_raw)
@@ -109,10 +114,14 @@ def raw_image_embeddings(input_path, output_path):
     csv_output = os.path.join(csv_folder, (folder_ID + '.csv'))
 
     for raw_image in raw_images:
-        embedding = core_arcface_cleaning.generate_embedding(raw_image)
-        img_name = os.path.basename(raw_image)
-        embedding = np.append(embedding, img_name)
-        write_embedding_to_csv(embedding, csv_output)
+        try:
+            embedding = core_arcface_cleaning.generate_embedding(raw_image)
+            img_name = os.path.basename(raw_image)
+            embedding = np.append(embedding, img_name)
+            write_embedding_to_csv(embedding, csv_output)
+        except:
+            print('failed to generate embedding for', img_name)
+            pass
 
 def read_csv_db(csv_path):
     with open(csv_path, newline='') as f:
@@ -156,7 +165,8 @@ def generate_distance(input_path, output_path):
             print('Similarity = %f' %(sim))
 
 print('======================================================')   
-print('TESTING GROUND')  
+print('TESTING GROUND') 
+# arrange_folder(input_path, output_path) 
 generate_csv(input_path, output_path)       
 # reference_image_embeddings(input_path, output_path)
 raw_image_embeddings(input_path, output_path)

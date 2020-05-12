@@ -7,5 +7,5 @@ nvidia-docker run --rm -it \
 --shm-size=8g \
 --name=dataset_cleaning \
 --privileged \
--v /mnt/Data/RKB-Face-Git/FaceCleaner/:/workspace/ \
+-v /mnt/Data/RKB-Face-Git/:/workspace/ \
 -v /mnt/Data/:/Data/ risetai/apiface:ubuntu18
