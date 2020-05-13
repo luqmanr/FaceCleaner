@@ -12,7 +12,7 @@ ap.add_argument('-o', '--output',
                       if None specified, will be on "../output/')
 args = vars(ap.parse_args())
 
-input_path = '/Data/RKB-Dataset/Instagram_to_process/reference/cynthiahartonoo'
+to_scan_path = '/Data/RKB-Dataset/Instagram_to_process/combined/'
 output_path = '/Data/RKB-Dataset/Instagram_to_process/arcface_testing'
 
 def arrange_folder(input_path, output_path):
@@ -168,7 +168,7 @@ def generate_distance(input_path, output_path):
 
     for index_raw, raw_embedding in enumerate(raw_embeddings):
         print('processing', raw_img[index_raw], '===================')
-        # sim_list = []
+        sim_list = []
         for index_ref, reference_embedding in enumerate(reference_embeddings):
             # Compute squared distance between embeddings
             dist = np.sum(np.square(reference_embedding - raw_embedding))
@@ -182,10 +182,17 @@ def generate_distance(input_path, output_path):
                 print('image_raw =', raw_img[index_raw])
                 # print('Distance = %f' %(dist))
                 print('Similarity = %f' %(sim), '\n')
-                similar_imgs.append(raw_img[index_raw])
+                sim_list.append(sim)
+                # similar_imgs.append(raw_img[index_raw])
             else:
                 print(raw_img[index_raw], 'not similar enough to', reference_img[index_ref])
                 print('Similarity = %f' %(sim), '\n')
+
+        if len(sim_list) > 0:
+            average_sim = sum(sim_list) / len(sim_list)
+            print('average_sim for', raw_img[index_raw], 'is =', average_sim)
+            if average_sim > 0.5:
+                similar_imgs.append(raw_img[index_raw])
 
     similar_imgs = list(set(similar_imgs))
     return similar_imgs
@@ -237,14 +244,18 @@ def write_new_csv(reference_csv, raw_csv, similar_imgs):
 
 
 print('======================================================')   
-print('TESTING GROUND') 
-# arrange_folder(input_path, output_path) 
-for i in range(1):
-    generate_csv(input_path, output_path)       
-    reference_image_embeddings(input_path, output_path)
-    raw_image_embeddings(input_path, output_path)
-    similar_imgs = generate_distance(input_path, output_path)
-    move_similar_to_train(input_path, output_path, similar_imgs)
+print('TESTING GROUND')
+id_paths = os.listdir(to_scan_path)
+for id_name in id_paths:
+    input_path = os.path.join(to_scan_path, id_name)
+
+    arrange_folder(input_path, output_path)
+    for i in range(1):
+        generate_csv(input_path, output_path)       
+        reference_image_embeddings(input_path, output_path)
+        raw_image_embeddings(input_path, output_path)
+        similar_imgs = generate_distance(input_path, output_path)
+        move_similar_to_train(input_path, output_path, similar_imgs)
 
 
 '''
