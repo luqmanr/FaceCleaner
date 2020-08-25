@@ -186,7 +186,7 @@ model = get_model(ctx , model_name)
 
 
 # Load first image
-img1 = cv2.imread('player3.jpg')
+img1 = cv2.imread('./dataset/player3.jpg')
 # Display first image
 # plt.imshow(cv2.cvtColor(img1,cv2.COLOR_BGR2RGB))
 # plt.show()
@@ -208,7 +208,7 @@ out1 = get_feature(model,pre1)
 
 
 # Load second image
-img2 = cv2.imread('player4.jpg')
+img2 = cv2.imread('./dataset/player4.jpg')
 # Display second image
 # plt.imshow(cv2.cvtColor(img2,cv2.COLOR_BGR2RGB))
 # plt.show()

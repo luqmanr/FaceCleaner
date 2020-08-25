@@ -1,3 +1,15 @@
+''' Run Docker
+nvidia-docker run --rm -it -d \
+-v /home/luqmanr/.Xauthority:/home/luqmanr/.Xauthority \
+-v /tmp/.X11-unix/:/tmp/.X11-unix \
+-e DISPLAY=${DISPLAY} \
+--shm-size=12g \
+--name=face-research \
+--privileged \
+-v /mnt/Data/RKB-Face-Git/FaceCleaner:/workspace/ \
+-v /mnt/Data/:/mnt/Data/ risetai/research:face-recognition
+'''
+
 import os, cv2, csv, argparse, shutil
 import numpy as np
 import pandas as pd
@@ -11,9 +23,6 @@ ap.add_argument('-o', '--output',
                 help='your desired output path, containing processed images \
                       if None specified, will be on "../output/')
 args = vars(ap.parse_args())
-
-to_scan_path = '/Data/RKB-Dataset/Instagram_to_process/combined/'
-output_path = '/Data/RKB-Dataset/Instagram_to_process/arcface_testing'
 
 def arrange_folder(input_path, output_path):
     files = os.listdir(input_path)
@@ -245,6 +254,10 @@ def write_new_csv(reference_csv, raw_csv, similar_imgs):
 
 print('======================================================')   
 print('TESTING GROUND')
+
+to_scan_path = '/mnt/Data/RKB-Dataset/Instagram_to_process/combined/'
+output_path = '/mnt/Data/RKB-Dataset/Instagram_to_process/arcface_testing'
+
 id_paths = os.listdir(to_scan_path)
 for id_name in id_paths:
     input_path = os.path.join(to_scan_path, id_name)
@@ -256,7 +269,6 @@ for id_name in id_paths:
         raw_image_embeddings(input_path, output_path)
         similar_imgs = generate_distance(input_path, output_path)
         move_similar_to_train(input_path, output_path, similar_imgs)
-
 
 '''
 image1 = './dataset/player1.jpg'

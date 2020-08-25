@@ -46,7 +46,7 @@ mtcnn_path = os.path.join(os.path.dirname('__file__'), 'mtcnn-model')
 detector = MtcnnDetector(model_folder=mtcnn_path, ctx=ctx, num_worker=1, accurate_landmark = True, threshold=det_threshold)
 
 # Load ONNX model
-model_name = '/workspace/FaceCleaner/ArcFaceDataCleaning/dependencies/resnet100.onnx'
+model_name = '/workspace/ArcFaceDataCleaning/dependencies/resnet100.onnx'
 model = get_model(ctx , model_name)
 
 def preprocess(img, bbox=None, landmark=None, **kwargs):
