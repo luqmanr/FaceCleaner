@@ -1,11 +1,11 @@
-nvidia-docker run --rm -it \
+nvidia-docker run --rm -it -d \
 -v /home/luqmanr/.Xauthority:/home/luqmanr/.Xauthority \
 -v /tmp/.X11-unix/:/tmp/.X11-unix \
 -e DISPLAY=${DISPLAY} \
 --device=/dev/video0:/dev/video0 \
 -p 5000:5000 \
---shm-size=8g \
---name=dataset_cleaning \
+--shm-size=12g \
+--name=face-research \
 --privileged \
--v /mnt/Data/RKB-Face-Git/:/workspace/ \
--v /mnt/Data/:/Data/ risetai/apiface:ubuntu18
+-v /mnt/Data/RKB-Face-Git/FaceCleaner:/workspace/ \
+-v /mnt/Data/:/mnt/Data/ risetai/research:face-recognition
