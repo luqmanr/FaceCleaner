@@ -8,7 +8,7 @@ nvidia-docker run --rm -it -d\
 --device=/dev/video0:/dev/video0 \
 -p 5000:5000 \
 --shm-size=12g \
---name=face-research \
+--name=dataset_cleaning \
 --privileged \
 -v /mnt/Data/RKB-Face-Git/FaceCleaner:/workspace/ \
 -v /mnt/Data/:/mnt/Data/ risetai/research:face-recognition
